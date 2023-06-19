@@ -1,9 +1,9 @@
 from telethon import TelegramClient, events, Button, errors
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
-from telethon.kayon import StringSession
+from telethon.session import StringSession
 import asyncio, json, os, re
-# kayon @xsiner0
+# session @xsiner0
 api_id_bot = 24106627 # اب ايدي 
 api_hash_bot = "6978bec96d690bb1f98ab3b2c8c54e83" # اب هاش
 bot = TelegramClient("Bot", api_id_bot, api_hash_bot).start(bot_token="توكنك") # توكن بوتك
@@ -13,7 +13,7 @@ owner_id = [6161180217] #ايديك
 collect, bots_to_collect, start_earn = True, [], False
 
 # LOAD SESSION
-kayon = json.load(open("session/session.json"))
+session = json.load(open("session/session.json"))
 
 
 
@@ -27,11 +27,11 @@ async def ToJson(user, path):
 async def Add_NUMBER(event, api_id, api_hash, phone_number):      
     try:
         phone_number = phone_number.replace('+','').replace(' ', '')
-        kayon = TelegramClient("session/"+phone_number+".session", api_id, api_hash)
-        await kayon.connect()
+        session = TelegramClient("session/"+phone_number+".session", api_id, api_hash)
+        await session.connect()
         
-        if not await kayon.is_user_authorized():
-            request = await kayon.send_code_request(phone_number)
+        if not await session.is_user_authorized():
+            request = await session.send_code_request(phone_number)
             
             async with bot.conversation(event.chat_id, timeout=200) as conv:
                 # verification code
@@ -40,19 +40,19 @@ async def Add_NUMBER(event, api_id, api_hash, phone_number):
                 verification_code = str(response_verification_code.message).replace('-', '')
                 
                 try:
-                    login = await kayon.sign_in(phone_number, code=int(verification_code))
+                    login = await session.sign_in(phone_number, code=int(verification_code))
                 except errors.SessionPasswordNeededError:
                     password_msg = await conv.send_message("ارسل تحقق بخطوتين")
                     password = await conv.get_response()
                     
-                    login = await kayon.sign_in(phone_number, password=password.text)
+                    login = await session.sign_in(phone_number, password=password.text)
 
                 # add to json
                 count = f"session_{phone_number}"
                 New_item = {count: {"phone": phone_number, "api_id": api_id, "api_hash": api_hash}}
-                kayon.update(New_item)
+                session.update(New_item)
 
-                await ToJson(kayon, "kayon/kayon.json")
+                await ToJson(session, "session/session.json")
         return "تم اضافة الرقم بنجاح"
     except Exception as error:
         return str(error)
@@ -87,20 +87,20 @@ async def Callbacks__(event):
 # DELETE NUMBER TELEGRAM BOT 
 @bot.on(events.CallbackQuery(data="remove_number"))
 async def Callbacks_(event):
-    global kayon
+    global session
     
-    delete, kayon, in_session = await event.delete(), json.load(open("kayon/kayon.json")), False
+    delete, session, in_session = await event.delete(), json.load(open("session/session.json")), False
     try:
         async with bot.conversation(event.chat_id, timeout=200) as conv:
             # verification code
             get_number= await conv.send_message("__ارسل الرقم لحذفه__")
             remove_number = await conv.get_response()
             remove_number = (remove_number.text).replace('+', '').replace(' ', '')
-            for session in kayon:
-                session_number = kayon.get(session).get("phone")
+            for session in session:
+                session_number = session.get(session).get("phone")
                 if remove_number == session_number:
-                    del kayon[session]
-                    await ToJson(kayon, "kayon/kayon.json")
+                    del session[session]
+                    await ToJson(session, "session/session.json")
                     in_session = True
                     break
         
@@ -109,7 +109,7 @@ async def Callbacks_(event):
         
     if in_session == True:
         await event.reply("تم حذف الرقم بنجاح")
-        kayon = json.load(open("kayon/kayon.json"))
+        session = json.load(open("session/session.json"))
     else:
         await event.reply("هذا الرقم غير موجود")
         
@@ -228,10 +228,10 @@ async def JoinChannelPrivate(client, username):
 # COLLECT NOW
 async def StartCollect(event, bot_username):
     
-    # load kayon
-    kayon = json.load(open("kayon/kayon.json"))
+    # load session
+    session = json.load(open("session/session.json"))
     while collect != False:
-        for session in kayon:
+        for session in session:
             try:
                 if collect == False:
                     # disconnect
@@ -241,11 +241,11 @@ async def StartCollect(event, bot_username):
                         pass
                     break
                 
-                api_id = int(kayon[session]["api_id"])
-                api_hash = str(kayon[session]["api_hash"])
-                phone = str(kayon[session]["phone"])
+                api_id = int(session[session]["api_id"])
+                api_hash = str(session[session]["api_hash"])
+                phone = str(session[session]["phone"])
                 
-                client = TelegramClient("kayon/"+(phone), api_id, api_hash)
+                client = TelegramClient("session/"+(phone), api_id, api_hash)
                 
                 await client.connect()
                 user = await client.get_me()
@@ -338,8 +338,8 @@ async def StartCollect(event, bot_username):
                 except Exception as error:
                     pass
                 
-                # load kayon again
-                kayon = json.load(open("kayon/kayon.json"))
+                # load session again
+                session = json.load(open("session/session.json"))
             except Exception as error:
                 pass
         
