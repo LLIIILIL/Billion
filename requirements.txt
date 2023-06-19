@@ -1,5 +1,4 @@
 Telethon==1.25.2
-re
 os
 json
 asyncio
