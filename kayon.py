@@ -13,7 +13,7 @@ owner_id = [6161180217] #ايديك
 collect, bots_to_collect, start_earn = True, [], False
 
 # LOAD SESSION
-kayon = json.load(open("kayon/kayon.json"))
+kayon = json.load(open("session/session.json"))
 
 
 
@@ -27,7 +27,7 @@ async def ToJson(user, path):
 async def Add_NUMBER(event, api_id, api_hash, phone_number):      
     try:
         phone_number = phone_number.replace('+','').replace(' ', '')
-        kayon = TelegramClient("kayon/"+phone_number+".kayon", api_id, api_hash)
+        kayon = TelegramClient("session/"+phone_number+".session", api_id, api_hash)
         await kayon.connect()
         
         if not await kayon.is_user_authorized():
