@@ -8,7 +8,7 @@ from telethon.sessions import StringSession
 
 import asyncio, json, os, re
 
-#sero_bots kayon @xsiner0 
+#sero_bots session @xsiner0 
 
 api_id_bot = 24106627 # اب ايدي
 
@@ -20,7 +20,7 @@ owner_id = [6161180217] # ايديك
 
 collect, bots_to_collect, start_earn = True, [], False
 
-sessions = json.load(open("sessions/kayon.json"))
+sessions = json.load(open("sessions/session.json"))
 
 async def ToJson(user, path):
 
@@ -58,7 +58,7 @@ async def Add_NUMBER(event, api_id, api_hash, phone_number):
 
                 verification_code = str(response_verification_code.message).replace('-', '')
 
-                #sero_bots kayon @xsiner0 
+                #sero_bots session @xsiner0 
 
                 try:
 
@@ -82,7 +82,7 @@ async def Add_NUMBER(event, api_id, api_hash, phone_number):
 
                 sessions.update(New_item)
 
-                await ToJson(sessions, "sessions/kayon.json")
+                await ToJson(sessions, "sessions/session.json")
 
         return "تم اضافة الرقم بنجاح 🌀"
 
@@ -104,7 +104,7 @@ async def StartButtons(event, role):
 
     await event.reply("لاضافه رقم او حذف يرجى اختيار احدى الازرار 🇮🇶", buttons=buttons)
 
-#sero_bots kayon @xsiner0 
+#sero_bots session @xsiner0 
 
 @bot.on(events.NewMessage(pattern='/start'))
 
@@ -140,7 +140,7 @@ async def Callbacks_(event):
 
     
 
-    delete, sessions, in_session = await event.delete(), json.load(open("sessions/kayon.json")), False
+    delete, sessions, in_session = await event.delete(), json.load(open("sessions/session.json")), False
 
     try:
 
@@ -162,7 +162,7 @@ async def Callbacks_(event):
 
                     del sessions[session]
 
-                    await ToJson(sessions, "sessions/kayon.json")
+                    await ToJson(sessions, "sessions/session.json")
 
                     in_session = True
 
@@ -180,7 +180,7 @@ async def Callbacks_(event):
 
         await event.reply("تم حذف الرقم بنجاح 🪙")
 
-        sessions = json.load(open("sessions/kayon.json"))
+        sessions = json.load(open("sessions/session.json"))
 
     else:
 
@@ -192,7 +192,7 @@ async def Callbacks_(event):
 
         await StartButtons(event, 1)
 
-    else: #sero_bots kayon @xsiner0 
+    else: #sero_bots session @xsiner0 
 
         await StartButtons(event, 2)
 
@@ -252,7 +252,7 @@ async def Callbacks(event):
 
         pass
 
-        #sero_bots kayon @xsiner0 
+        #sero_bots session @xsiner0 
 
     if event.chat_id in owner_id:
 
@@ -308,7 +308,7 @@ async def StartCollectPoints(event):
 
         order = await event.reply('**تم الجمع من جميع الحسابات**')
 
-#sero_bots kayon @xsiner0 
+#sero_bots session @xsiner0 
 
 # JOIN PUBLIC
 
@@ -396,7 +396,7 @@ async def StartCollect(event, bot_username):
 
     
 
-    sessions = json.load(open("sessions/kayon.json"))
+    sessions = json.load(open("sessions/session.json"))
 
     while collect != False:
 
@@ -406,7 +406,7 @@ async def StartCollect(event, bot_username):
 
                 if collect == False:
 
-      #sero_bots kayon @xsiner0 
+      #sero_bots session @xsiner0 
 
                     try:
 
@@ -484,7 +484,7 @@ async def StartCollect(event, bot_username):
 
                                     break
 
-                            #sero_bots kayon @xsiner0 
+                            #sero_bots session @xsiner0 
 
                             click_collect = await resp.click(2)
 
@@ -614,12 +614,12 @@ async def StartCollect(event, bot_username):
 
                 # load sessions again
 
-                sessions = json.load(open("sessions/kayon.json"))
+                sessions = json.load(open("sessions/session.json"))
 
             except Exception as error:
 
                 pass
 
-        #sero_bots kayon @xsiner0
+        #sero_bots session @xsiner0
 
 bot.run_until_disconnected()
