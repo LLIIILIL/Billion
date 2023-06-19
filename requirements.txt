@@ -1,2 +1,2 @@
-Telethon==1.25.2
+telethon==1.25.2
 asyncio
