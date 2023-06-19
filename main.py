@@ -1,7 +1,7 @@
 from telethon import TelegramClient, events, Button, errors
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
-from telethon.kayon import StringSession
+from telethon.sessions import StringSession
 import asyncio, json, os, re
 # session @xsiner0
 api_id_bot = 24106627 # اب ايدي 
